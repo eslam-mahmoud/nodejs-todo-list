@@ -62,7 +62,7 @@ app.get('/todo', function(req, res, next){
 });
 
 app.post('/api/todo/create', function(req, res, next){
-	//create new user
+	//create new item
 	var item1 = new Item({title:req.body.title, done: false});
 
 	// Each document can be saved to the database by calling its save method.
@@ -74,6 +74,21 @@ app.post('/api/todo/create', function(req, res, next){
 		}
 		res.status(200).json({msg: 'OK', item: item1});
 	});	
+});
+
+app.post('/api/todo/update', function(req, res, next){
+	Item.findOneAndUpdate(
+		{_id:req.body.id},//conditions
+		{title:req.body.title, done: req.body.done},//update
+		{new: true, upsert: true}, //options
+		function (error, item) { //callback
+			if (error) {
+				console.error(error);
+				res.send(false);
+			}
+			res.status(200).json({msg: 'OK', item: item});
+		}
+	);
 });
 
 app.get('/api/todo/get', function(req, res, next){
