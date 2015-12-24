@@ -8,10 +8,14 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 //path helper
 var path = require('path');
+//needed for encryption
+var bcrypt = require('bcrypt-nodejs');
 //create the app
 var app = express();
 //connection port
 var port = process.env.PORT || config.port;
+
+/*------------------------------------------------------------------------------*/
 
 //set the view engine
 app.set('views', path.join(__dirname, 'views'));
@@ -26,20 +30,30 @@ app.listen(port, function(){
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+/*------------------------------------------------------------------------------*/
+
 //MONGO RELATED//
 // With Mongoose, everything is derived from a Schema.
 var userSchema = mongoose.Schema({
-	socket: String,
-	nickname: String
+    email: { type: String, required: true },
+    password: { type: String, required: true }
 });
+userSchema.methods.setPassword = function(passwordString){
+	this.password = bcrypt.hashSync(passwordString);
+}
+userSchema.methods.isValidPassword = function(passwordString) {
+	return bcrypt.compareSync(passwordString, this.password);
+};
 //compiling our schema into a Model.
 var User = mongoose.model('User', userSchema);
+
 var itemSchema = mongoose.Schema({
-	done: Boolean,
-	title: String
+	done: {type: Boolean, required: true, default: false},
+	title: { type: String, required: true },
 });
 //compiling our schema into a Model.
 var Item = mongoose.model('Item', itemSchema);
+
 //connect to mongo db
 mongoose.connect(config.mongoUrl);
 //We have a pending connection to the test database running on localhost.
@@ -51,6 +65,7 @@ db.once('open', function() {
 	//all code can be within this callback.
 });
 
+/*------------------------------------------------------------------------------*/
 
 //handle the routes
 //index page
