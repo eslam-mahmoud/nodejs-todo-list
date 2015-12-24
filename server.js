@@ -1,3 +1,5 @@
+//read the config
+var config = require('./config.json');
 //Getting express
 var express = require('express');
 // getting-started.js
@@ -9,7 +11,7 @@ var path = require('path');
 //create the app
 var app = express();
 //connection port
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || config.port;
 
 //set the view engine
 app.set('views', path.join(__dirname, 'views'));
@@ -39,7 +41,7 @@ var itemSchema = mongoose.Schema({
 //compiling our schema into a Model.
 var Item = mongoose.model('Item', itemSchema);
 //connect to mongo db
-mongoose.connect('mongodb://user1:q1w2e3r4@ds051933.mongolab.com:51933/nodejs');
+mongoose.connect(config.mongoUrl);
 //We have a pending connection to the test database running on localhost.
 //We now need to get notified if we connect successfully or if a connection error occurs:
 var db = mongoose.connection;

@@ -1,0 +1,5 @@
+{
+	"mongoUrl": "mongodb://user:pass@ds051933.mongolab.com:51933/nodejs",
+	"port": 3000,
+	"salt": "salt"
+}
