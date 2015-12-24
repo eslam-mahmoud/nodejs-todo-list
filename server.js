@@ -8,8 +8,6 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 //path helper
 var path = require('path');
-//needed for encryption
-var bcrypt = require('bcrypt-nodejs');
 //create the app
 var app = express();
 //connection port
@@ -38,12 +36,6 @@ var userSchema = mongoose.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true }
 });
-userSchema.methods.setPassword = function(passwordString){
-	this.password = bcrypt.hashSync(passwordString);
-}
-userSchema.methods.isValidPassword = function(passwordString) {
-	return bcrypt.compareSync(passwordString, this.password);
-};
 //compiling our schema into a Model.
 var User = mongoose.model('User', userSchema);
 
@@ -70,12 +62,47 @@ db.once('open', function() {
 //handle the routes
 //index page
 app.get('/', function(req, res, next){
-	res.render('index', {message: 'Welcome :)'});
+	res.render('index', {title: 'Todo list'});
+});
+
+//register page
+app.get('/register', function(req, res, next){
+	res.render('register', {title: 'Todo list'});
 });
 
 //todo list page
 app.get('/todo', function(req, res, next){
 	res.render('todo', {title: 'Todo list'});
+});
+
+app.post('/api/user/create', function(req, res, next){
+	//create new user
+	var user1 = new User({email:req.body.email, password: req.body.password});
+	// Each document can be saved to the database by calling its save method.
+	//The first argument to the callback will be an error if any occured.
+	user1.save(function(error, user1){
+		if (error) {
+			console.error(error);
+			res.send(false);
+		}
+		res.status(200).json({msg: 'OK', user: user1});
+	});	
+});
+
+app.post('/api/user/login', function(req, res, next){
+	User.find(
+		{
+			password: req.body.password, 
+			email: req.body.email
+		}, 
+		function (error, users) {
+			if (error) {
+				console.error(error);
+				res.send(false);
+			}
+			res.status(200).json(users);
+		}
+	);
 });
 
 app.post('/api/todo/create', function(req, res, next){

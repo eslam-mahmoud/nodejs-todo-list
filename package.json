@@ -9,7 +9,6 @@
   "author": "Eslam Mahmoud",
   "license": "ISC",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
     "hogan-express": "^0.5.2",

@@ -39,7 +39,7 @@ body {
   padding: 0 0 10px 0;
 }
 
-#tasks input[type="text"] {
+#tasks input[type="text"], #tasks input[type="password"], #tasks input[type="submit"]{
   width: 466px;
   font-size: 24px;
   font-family: inherit;
@@ -47,12 +47,12 @@ body {
   border: 0;
   outline: none;
   padding: 6px;
-  border: 1px solid #999999;
+  border: 1px solid #eeeeee;
   
-  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+  /*-moz-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
   -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
   -o-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
-  box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;*/
 }
 
 #tasks input::-webkit-input-placeholder {

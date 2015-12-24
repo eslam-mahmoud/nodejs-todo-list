@@ -1,10 +1,45 @@
 var items_count = 0;
 $(document).ready(function(){
 
+	//register user
+	$('form#register').submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			type: 'POST',
+			data: $('form#register').serialize(),
+			url: '/api/user/create',
+			success: function(data){
+				if (data.msg == 'OK') {
+					window.location = "/";
+				} else {
+					alert('Error !');
+				}
+			}
+		});
+		return false;
+	});
+
+	//register user
+	$('form#login').submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			type: 'POST',
+			data: $('form#login').serialize(),
+			url: '/api/user/login',
+			success: function(data){
+				if (data.msg == 'OK') {
+					window.location = "/";
+				} else {
+					alert('Error !');
+				}
+			}
+		});
+		return false;
+	});
+
 	//add item
 	$('form#todo').submit(function(e){
 		e.preventDefault();
-		console.log($('form#todo').serialize());
 		$.ajax({
 			type: 'POST',
 			data: $('form#todo').serialize(),
@@ -70,7 +105,9 @@ $(document).ready(function(){
 			}
 		});
 	});
+});
 
+function getAllItems() {
 	//get all items
 	$.ajax({
 		type: 'GET',
@@ -86,7 +123,7 @@ $(document).ready(function(){
 			updateItemCount();
 		}
 	});
-});
+}
 
 function updateItem(post_data) {
 	$.ajax({
