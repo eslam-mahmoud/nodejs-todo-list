@@ -108,6 +108,19 @@ app.post('/api/todo/update', function(req, res, next){
 	);
 });
 
+app.post('/api/todo/delete', function(req, res, next){
+	Item.findOneAndRemove(
+		{_id:req.body.id},//conditions
+		function (error, item) { //callback
+			if (error) {
+				console.error(error);
+				res.send(false);
+			}
+			res.status(200).json({msg: 'OK'});
+		}
+	);
+});
+
 app.get('/api/todo/get', function(req, res, next){
 	//Find all saved items
 	Item.find(function (error, items) {

@@ -4,6 +4,7 @@ $(document).ready(function(){
 	//add item
 	$('form#todo').submit(function(e){
 		e.preventDefault();
+		console.log($('form#todo').serialize());
 		$.ajax({
 			type: 'POST',
 			data: $('form#todo').serialize(),
@@ -47,6 +48,27 @@ $(document).ready(function(){
 
 		updateItem(data);
 		$(this).parents('.edit').hide();
+	});
+
+	$('.items').on('click', 'a.destroy', function(e){
+		e.preventDefault();
+		var item_id = $(this).parents('.item').attr('id');
+		$.ajax({
+			type: 'POST',
+			url: '/api/todo/delete',
+			data: {id: item_id},
+			success: function(data){
+				if (data.msg == 'OK') {
+					if (!$('.items #'+item_id+ ' .checkbox').is(':checked')) {
+						items_count--;
+					}
+					$('.items #'+item_id).remove();
+					updateItemCount();
+				} else {
+					alert('Error !');
+				}
+			}
+		});
 	});
 
 	//get all items
